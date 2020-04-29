@@ -5,6 +5,8 @@ List<Wall> walls = new ArrayList();
 void setup(){
   size(1280, 720);
   walls.add(new Wall(new Vector(100,150), new Vector(200,250)));
+  walls.add(new Wall(new Vector(700,250), new Vector(300,250)));
+  walls.add(new Wall(new Vector(700,850), new Vector(400,650)));
   
    
 }
@@ -22,20 +24,21 @@ void draw(){
 }
 
 class Ray{
-  PVector start;
+  PVector start, end;
   PVector dir;
+  float angle;
   Ray(PVector start, float angle){
    this.start = start; 
-   this.dir = PVector.fromAngle(angle);
+   this.angle = angle;
+   this.dir =  PVector.fromAngle(angle);
    castAll();
   }
   
  private void castAll(){
    float record = 2100000000;
-   PVector closest = new PVector(dir.x*record, dir.y*record);
+   PVector closest = null;
    for(Wall wall : walls){
       PVector vec = cast(wall);
-      print(vec);
       if(vec == null) continue;
       
       float dis = lineLength(start.x, start.y, vec.x, vec.y);
@@ -45,7 +48,7 @@ class Ray{
       }
      
    }
-   dir = closest;
+   end = closest != null ? closest : dir.mult(2100000);
  }
   
  PVector cast(Wall wall) {
@@ -81,8 +84,12 @@ class Ray{
   }
   
   void draw(){
+    end = end.sub(start);
     stroke(255);
-    line(start.x, start.y, dir.x, dir.y);
+    pushMatrix();
+      translate(start.x, start.y);
+      line(0, 0, end.x, end.y);
+    popMatrix();
   }
   
 }
