@@ -25,7 +25,7 @@ float fov = 90;
 /**
   Toggle with LEFT Arrow Key
 */
-boolean useFov = true;
+boolean useFov = false;
 
 
 
