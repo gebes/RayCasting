@@ -1,22 +1,50 @@
-import java.util.*;
+/*
+ RayCasting Test
+ 
+ 
+ Build Walls: 
+   Select two Points wiht LeftClick
+   
+ RayCast:
+   Move your mouse around, when not placing a wall
+ 
+ Change RayCast by degrees
+   Press Arrow Up or Down
 
-List < Wall > walls = new ArrayList();
+
+
+*/
+
+// SETTINGs
 
 /**
   How many Rays per degree?
 */
-float density = 1.5;
+float density = 1.0;
+
+
+
+import java.util.*;
+
+List < Wall > walls = new ArrayList();
 
 void setup() {
  size(1280, 720);
  walls.add(new Wall(new PVector(100, 150), new PVector(200, 250)));
-
 }
 
 PVector start = null, end = null;
 
 void draw() {
  background(0);
+ 
+ 
+ if(keyPressed){
+  keyPressed = false;
+  if(keyCode == UP) density -= 0.1;
+  if(keyCode == DOWN) density += 0.1;
+ }
+ 
  
  if(mousePressed == true){
   mousePressed = false;
