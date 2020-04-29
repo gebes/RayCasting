@@ -9,17 +9,37 @@ float density = 1.5;
 
 void setup() {
  size(1280, 720);
- walls.add(new Wall(new Vector(100, 150), new Vector(200, 250)));
- walls.add(new Wall(new Vector(700, 250), new Vector(300, 250)));
- walls.add(new Wall(new Vector(700, 450), new Vector(300, 250)));
- walls.add(new Wall(new Vector(700, 450), new Vector(300, 250)));
- walls.add(new Wall(new Vector(700, 250), new Vector(300, 200)));
- walls.add(new Wall(new Vector(700, 850), new Vector(400, 650)));
+ walls.add(new Wall(new PVector(100, 150), new PVector(200, 250)));
+ walls.add(new Wall(new PVector(700, 250), new PVector(300, 250)));
+ walls.add(new Wall(new PVector(700, 450), new PVector(300, 250)));
+ walls.add(new Wall(new PVector(700, 450), new PVector(300, 250)));
+ walls.add(new Wall(new PVector(700, 250), new PVector(300, 200)));
+ walls.add(new Wall(new PVector(700, 850), new PVector(400, 650)));
 
 }
 
+PVector start = null, end = null;
+
 void draw() {
  background(0);
+ 
+ if(start == null && end == null){
+  walls.add(new Wall(start, end));
+   start = null;
+   end = null; 
+ }
+ 
+ if(mousePressed == true){
+  mousePressed = false;
+  
+  if(start == null){
+   start = new PVector(mouseX, mouseY); 
+  }else if(end == null){
+   end = new PVector(mouseX, mouseY); 
+  }
+  
+   
+ }
  
  
  for (Wall wall: walls)
@@ -104,8 +124,8 @@ class Ray {
 }
 
 class Wall {
- Vector a, b;
- Wall(Vector a, Vector b) {
+ PVector a, b;
+ Wall(PVector a, PVector b) {
   this.a = a;
   this.b = b;
  }
