@@ -5,21 +5,23 @@ List < Wall > walls = new ArrayList();
 /**
   How many Rays per degree?
 */
-float density = 0.5;
+float density = 1.5;
 
 void setup() {
  size(1280, 720);
  walls.add(new Wall(new Vector(100, 150), new Vector(200, 250)));
  walls.add(new Wall(new Vector(700, 250), new Vector(300, 250)));
  walls.add(new Wall(new Vector(700, 450), new Vector(300, 250)));
- walls.add(new Wall(new Vector(700, 250), new Vector(300, 150)));
+ walls.add(new Wall(new Vector(700, 450), new Vector(300, 250)));
+ walls.add(new Wall(new Vector(700, 250), new Vector(300, 200)));
  walls.add(new Wall(new Vector(700, 850), new Vector(400, 650)));
-
 
 }
 
 void draw() {
  background(0);
+ 
+ 
  for (Wall wall: walls)
   wall.draw();
 
@@ -113,15 +115,4 @@ class Wall {
   line(a.x, a.y, b.x, b.y);
  }
 
-}
-
-
-
-class Vector {
- float x, y;
- Vector() {}
- Vector(float x, float y) {
-  this.x = x;
-  this.y = y;
- }
 }
