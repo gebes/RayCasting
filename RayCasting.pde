@@ -8,7 +8,7 @@
  RayCast:
    Move your mouse around, when not placing a wall
  
- Change RayCast by degrees
+ Change FOV
    Press Arrow Up or Down
 
 
@@ -20,7 +20,7 @@
 /**
   How many Rays per degree?
 */
-float density = 1.0;
+float fov = 90;
 
 
 
@@ -33,26 +33,28 @@ void setup() {
  walls.add(new Wall(new PVector(100, 150), new PVector(200, 250)));
 }
 
-PVector start = null, end = null;
+PVector lineStart = null, lineEnd = null;
+
+PVector lastMousePosition = new PVector(0, 0);
+
+float rotation = 0, targetRotation = rotation;
 
 void draw() {
  background(0);
  
- 
+
  if(keyPressed){
-  keyPressed = false;
-  if(keyCode == UP) density -= 0.1;
-  if(keyCode == DOWN) density += 0.1;
+  if(keyCode == UP) fov++; 
+  if(keyCode == DOWN) fov--;
  }
  
- 
- if(mousePressed == true){
+ if(mousePressed){
   mousePressed = false;
   
-  if(start == null){
-   start = new PVector(mouseX, mouseY); 
-  }else if(end == null){
-   end = new PVector(mouseX, mouseY); 
+  if(lineStart == null){
+   lineStart = new PVector(mouseX, mouseY); 
+  }else if(lineEnd == null){
+   lineEnd = new PVector(mouseX, mouseY); 
   }
   
    
@@ -63,22 +65,35 @@ void draw() {
   wall.draw();
 
  
- if(start != null){
+ if(lineStart != null){
    
-   line(start.x, start.y, mouseX, mouseY);
+   line(lineStart.x, lineStart.y, mouseX, mouseY);
    
    
-   if(end != null){
-     walls.add(new Wall(start, end));
-     start = null;
-     end = null;  
+   if(lineEnd != null){
+     walls.add(new Wall(lineStart, lineEnd));
+     lineStart = null;
+     lineEnd = null;  
    }
    
    return;
  }
 
- for (float i = 0; i < 360 / density; i+= 1) {
-  Ray ray = new Ray(new PVector(mouseX, mouseY), i);
+ PVector mousePos = new PVector(mouseX, mouseY);
+ 
+ if(mousePos.x != lastMousePosition.x && mousePos.y != lastMousePosition.y){
+ PVector dv = lastMousePosition.sub(new PVector(mousePos.x, mousePos.y));
+   targetRotation =  degrees((float)(-Math.atan2(dv.x, dv.y) - Math.PI / 2));
+ lastMousePosition = mousePos;
+ }
+ 
+   rotation+= (targetRotation-rotation)*0.1;
+  
+  println(targetRotation + "; " +rotation);
+
+  
+ for (float i = targetRotation-(fov/2); i < targetRotation + (fov/2); i++) {
+  Ray ray = new Ray(mousePos, i);
   ray.draw();
  }
 
@@ -91,7 +106,7 @@ class Ray {
  Ray(PVector start, float angle) {
   this.start = start;
   this.angle = angle;
-  this.dir = PVector.fromAngle(angle);
+  this.dir = PVector.fromAngle(radians(angle));
   castAll();
  }
 
