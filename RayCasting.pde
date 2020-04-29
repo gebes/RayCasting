@@ -10,11 +10,6 @@ float density = 1.5;
 void setup() {
  size(1280, 720);
  walls.add(new Wall(new PVector(100, 150), new PVector(200, 250)));
- walls.add(new Wall(new PVector(700, 250), new PVector(300, 250)));
- walls.add(new Wall(new PVector(700, 450), new PVector(300, 250)));
- walls.add(new Wall(new PVector(700, 450), new PVector(300, 250)));
- walls.add(new Wall(new PVector(700, 250), new PVector(300, 200)));
- walls.add(new Wall(new PVector(700, 850), new PVector(400, 650)));
 
 }
 
@@ -22,12 +17,6 @@ PVector start = null, end = null;
 
 void draw() {
  background(0);
- 
- if(start == null && end == null){
-  walls.add(new Wall(start, end));
-   start = null;
-   end = null; 
- }
  
  if(mousePressed == true){
   mousePressed = false;
@@ -41,9 +30,24 @@ void draw() {
    
  }
  
- 
+  
  for (Wall wall: walls)
   wall.draw();
+
+ 
+ if(start != null){
+   
+   line(start.x, start.y, mouseX, mouseY);
+   
+   
+   if(end != null){
+     walls.add(new Wall(start, end));
+     start = null;
+     end = null;  
+   }
+   
+   return;
+ }
 
  for (float i = 0; i < 360 / density; i+= density) {
   Ray ray = new Ray(new PVector(mouseX, mouseY), i);
