@@ -35,7 +35,7 @@ List < Wall > walls = new ArrayList();
 
 void setup() {
  size(1280, 720);
- walls.add(new Wall(new PVector(100, 150), new PVector(200, 250)));
+ walls.add(new Wall(new PVector(100, 650), new PVector(500, 200)));
 }
 
 PVector lineStart = null, lineEnd = null;
