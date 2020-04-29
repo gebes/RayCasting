@@ -22,6 +22,11 @@
 */
 float fov = 90;
 
+/**
+  Toggle with LEFT Arrow Key
+*/
+boolean useFov = true;
+
 
 
 import java.util.*;
@@ -41,58 +46,68 @@ float rotation = 0, targetRotation = rotation;
 
 void draw() {
  background(0);
- 
 
- if(keyPressed){
-  if(keyCode == UP) fov++; 
-  if(keyCode == DOWN) fov--;
- }
- 
- if(mousePressed){
-  mousePressed = false;
-  
-  if(lineStart == null){
-   lineStart = new PVector(mouseX, mouseY); 
-  }else if(lineEnd == null){
-   lineEnd = new PVector(mouseX, mouseY); 
+
+ if (keyPressed) {
+  if (keyCode == UP) fov++;
+  if (keyCode == DOWN) fov--;
+  if (keyCode == LEFT) {
+   useFov = !useFov;
+   keyPressed = false;
   }
-  
-   
  }
- 
-  
+
+ if (mousePressed) {
+  mousePressed = false;
+
+  if (lineStart == null) {
+   lineStart = new PVector(mouseX, mouseY);
+  } else if (lineEnd == null) {
+   lineEnd = new PVector(mouseX, mouseY);
+  }
+
+
+ }
+
+
  for (Wall wall: walls)
   wall.draw();
 
- 
- if(lineStart != null){
-   
-   line(lineStart.x, lineStart.y, mouseX, mouseY);
-   
-   
-   if(lineEnd != null){
-     walls.add(new Wall(lineStart, lineEnd));
-     lineStart = null;
-     lineEnd = null;  
-   }
-   
-   return;
+
+ if (lineStart != null) {
+
+  line(lineStart.x, lineStart.y, mouseX, mouseY);
+
+
+  if (lineEnd != null) {
+   walls.add(new Wall(lineStart, lineEnd));
+   lineStart = null;
+   lineEnd = null;
+  }
+
+  return;
  }
 
  PVector mousePos = new PVector(mouseX, mouseY);
- 
- if(mousePos.x != lastMousePosition.x && mousePos.y != lastMousePosition.y){
- PVector dv = lastMousePosition.sub(new PVector(mousePos.x, mousePos.y));
-   targetRotation =  degrees((float)(-Math.atan2(dv.x, dv.y) - Math.PI / 2));
- lastMousePosition = mousePos;
- }
- 
-   rotation+= (targetRotation-rotation)*0.1;
-  
-  println(targetRotation + "; " +rotation);
 
-  
- for (float i = targetRotation-(fov/2); i < targetRotation + (fov/2); i++) {
+ if (mousePos.x != lastMousePosition.x && mousePos.y != lastMousePosition.y) {
+  PVector dv = lastMousePosition.sub(new PVector(mousePos.x, mousePos.y));
+  targetRotation = degrees((float)(-Math.atan2(dv.x, dv.y) - Math.PI / 2));
+  lastMousePosition = mousePos;
+ }
+
+ rotation += (targetRotation - rotation) * 0.1;
+
+
+ float start = targetRotation - (fov / 2), end = targetRotation + (fov / 2);
+
+ if (!useFov) {
+  start = 0;
+  end = 360;
+ }
+
+
+ for (float i = start; i < end; i++) {
   Ray ray = new Ray(mousePos, i);
   ray.draw();
  }
