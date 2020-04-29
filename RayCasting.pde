@@ -77,7 +77,7 @@ void draw() {
    return;
  }
 
- for (float i = 0; i < 360 / density; i+= density) {
+ for (float i = 0; i < 360 / density; i+= 1) {
   Ray ray = new Ray(new PVector(mouseX, mouseY), i);
   ray.draw();
  }
